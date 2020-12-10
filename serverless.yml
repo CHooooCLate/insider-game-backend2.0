@@ -9,12 +9,13 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:GetItem
         - dynamodb:Scan
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - Fn::GetAtt: [ ConnectionsTable, Arn ]
+        - arn:aws:dynamodb:*:*:table/*
     - Effect: Allow
       Action:
         - execute-api:ManageConnections
@@ -42,20 +43,20 @@ functions:
       - websocket:
           route: sendmessage
 
-resources:
-  Resources:
-    ConnectionsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: connection
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
-        SSESpecification:
-          SSEEnabled: True
+  setname:
+    handler: setname/lambda_function.lambda_handler
+    events:
+      - websocket:
+          route: setname
+
+  start:
+    handler: start/lambda_function.lambda_handler
+    events:
+      - websocket:
+          route: start
+
+  vote:
+    handler: vote/lambda_function.lambda_handler
+    events:
+      - websocket:
+          route: vote
