@@ -55,6 +55,12 @@ functions:
       - websocket:
           route: start
 
+  next:
+    handler: next/lambda_function.lambda_handler
+    events:
+      - websocket:
+          route: next
+
   vote:
     handler: vote/lambda_function.lambda_handler
     events:

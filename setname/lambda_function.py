@@ -69,6 +69,7 @@ def lambda_handler(event, context):
         try:
             result = json.dumps({
                 'action': 'setname',
+                'playerId': connection_id,
                 'gameId': gameId,
                 'name': name
             })
